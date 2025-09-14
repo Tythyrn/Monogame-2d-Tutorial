@@ -1,0 +1,37 @@
+# Build artifacts
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.exe
+*.pdb
+*.vshost.*
+*.user
+*.suo
+*.cache
+
+# MonoGame Content Pipeline
+Content/bin/
+Content/obj/
+
+# Visual Studio and IDE files
+.vs/
+.vscode
+*.sln.ide
+*.csproj.user
+*.resharper
+*.bak
+*.orig
+*.log
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Package management
+packages/
+*.nupkg
+
+# Temporary files
+*~
+*.tmp
