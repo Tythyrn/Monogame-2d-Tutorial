@@ -10,10 +10,10 @@ namespace Tutorial;
 public class Game1 : Core
 {
     // texture region that defines the slime sprite in the atlas.
-    private TextureRegion _slime;
+    private AnimatedSprite _slime;
 
     // texture region that defines the bat sprite in the atlas.
-    private TextureRegion _bat;
+    private AnimatedSprite _bat;
 
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
@@ -29,23 +29,16 @@ public class Game1 : Core
 
     protected override void LoadContent()
     {
-        // Load the atlas texture using the content manager
-        Texture2D atlasTexture = Content.Load<Texture2D>("images/atlas");
+        // Create the texture atlas from the XML configuration file
+        TextureAtlas atlas = TextureAtlas.FromFile(Content, "images/atlas-definition.xml");
 
-        //  Create a TextureAtlas instance from the atlas
-        TextureAtlas atlas = new TextureAtlas(atlasTexture);
+        // Create the slime sprite from the atlas.
+        _slime = atlas.CreateAnimatedSprite("slime-animation");
+        _slime.Scale = new Vector2(4.0f, 4.0f);
 
-        // add the slime region to the atlas.
-        atlas.AddRegion("slime", 0, 0, 20, 20);
-
-        // add the bat region to the atlas.
-        atlas.AddRegion("bat", 20, 0, 20, 20);
-
-        // retrieve the slime region from the atlas.
-        _slime = atlas.GetRegion("slime");
-
-        // retrieve the bat region from the atlas.
-        _bat = atlas.GetRegion("bat");
+        // Create the bat sprite from the atlas.
+        _bat = atlas.CreateAnimatedSprite("bat-animation");
+        _bat.Scale = new Vector2(4.0f, 4.0f);
     }
 
     protected override void Update(GameTime gameTime)
@@ -53,7 +46,11 @@ public class Game1 : Core
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        // Update the slime animated sprite.
+        _slime.Update(gameTime);
+
+        // Update the bat animated sprite.
+        _bat.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -65,11 +62,11 @@ public class Game1 : Core
         // Begin the sprite batch to prepare for rendering.
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        // Draw the slime texture region at a scale of 4.0
-        _slime.Draw(SpriteBatch, Vector2.Zero, Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
+        // Draw the slime sprite.
+        _slime.Draw(SpriteBatch, Vector2.One);
 
-        // Draw the bat texture region 10px to the right of the slime at a scale of 4.0
-        _bat.Draw(SpriteBatch, new Vector2(_slime.Width * 4.0f + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 1.0f);
+        // Draw the bat sprite 10px to the right of the slime.
+        _bat.Draw(SpriteBatch, new Vector2(_slime.Width + 10, 0));
 
         // Always end the sprite batch when finished.
         SpriteBatch.End();
